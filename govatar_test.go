@@ -93,6 +93,7 @@ func TestGenerateFromString(t *testing.T) {
 }
 
 func TestMonster(t *testing.T) {
+	//getPerson(MONSTER)
 	generateFileFromStringTest(t, MONSTER)
 	//generateFileFromStringTest(t, FEMALE)
 }

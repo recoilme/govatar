@@ -40,9 +40,10 @@ func main() {
 				var err error
 				switch c.Args().First() {
 				case "male", "m":
-					g = govatar.MALE
+					g = govatar.MONSTER
 				case "female", "f":
 					g = govatar.FEMALE
+
 				default:
 					fmt.Println("Incorrect gender param. Run `govatar help generate`")
 					os.Exit(1)

@@ -1,7 +1,6 @@
 package govatar
 
 import (
-	"bytes"
 	"errors"
 	"hash/fnv"
 	"image"
@@ -9,14 +8,14 @@ import (
 	"image/gif"
 	"image/jpeg"
 	"image/png"
+	"io/ioutil"
+	"log"
 	"math/rand"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"time"
-
-	"github.com/recoilme/govatar/bindata"
 )
 
 var errUnknownGender = errors.New("Unknown gender")
@@ -143,7 +142,13 @@ func drawImg(dst draw.Image, asset string, err error) error {
 	if err != nil {
 		return err
 	}
-	src, _, err := image.Decode(bytes.NewReader(bindata.MustAsset(asset)))
+	infile, err := os.Open(asset)
+	if err != nil {
+		// replace this with real error handling
+		panic(err)
+	}
+	defer infile.Close()
+	src, _, err := image.Decode(infile) //bindata.MustAsset(asset)))
 	if err != nil {
 		return err
 	}
@@ -172,10 +177,19 @@ func getPerson(gender Gender) person {
 	}
 }
 
-func readAssetsFrom(dir string) []string {
-	assets, _ := bindata.AssetDir(dir)
-	for i, asset := range assets {
-		assets[i] = filepath.Join(dir, asset)
+func readAssetsFrom(dir string) (assets []string) {
+
+	files, err := ioutil.ReadDir("./" + dir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, asset := range files {
+		if asset.Name() == ".DS_Store" {
+			continue
+		}
+
+		assets = append(assets, filepath.Join(dir, asset.Name()))
 	}
 	sort.Sort(naturalSort(assets))
 	return assets
