@@ -92,6 +92,10 @@ func TestGenerateFromString(t *testing.T) {
 
 }
 
+func TestMonster(t *testing.T) {
+	generateFileFromStringTest(t, MONSTER)
+	//generateFileFromStringTest(t, FEMALE)
+}
 func TestGenerateFileFromString(t *testing.T) {
 	generateFileFromStringTest(t, MALE)
 	//generateFileFromStringTest(t, FEMALE)
@@ -102,11 +106,8 @@ func generateFileFromStringTest(t *testing.T, gender Gender) {
 		imageName string
 		mimeType  string
 	}{
-		{"avatar.jpeg", "image/jpeg"},
+
 		{"avatar.jpg", "image/jpeg"},
-		{"avatar.png", "image/png"},
-		{"avatar.gif", "image/gif"},
-		{"avatar.xyz", "image/png"},
 	}
 
 	for _, tt := range imagesTests {

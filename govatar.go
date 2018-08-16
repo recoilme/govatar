@@ -16,7 +16,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/o1egl/govatar/bindata"
+	"github.com/recoilme/govatar/bindata"
 )
 
 var errUnknownGender = errors.New("Unknown gender")
@@ -33,6 +33,7 @@ type store struct {
 	Background []string
 	Male       person
 	Female     person
+	Monster    person
 }
 
 var assetsStore *store
@@ -44,12 +45,14 @@ type Gender int
 const (
 	MALE Gender = iota
 	FEMALE
+	MONSTER
 )
 
 func init() {
 	male := getPerson(MALE)
 	female := getPerson(FEMALE)
-	assetsStore = &store{Background: readAssetsFrom("data/background"), Male: male, Female: female}
+	monster := getPerson(MONSTER)
+	assetsStore = &store{Background: readAssetsFrom("data/background"), Male: male, Female: female, Monster: monster}
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
@@ -60,6 +63,8 @@ func Generate(gender Gender) (image.Image, error) {
 		return randomAvatar(assetsStore.Male, time.Now().UnixNano())
 	case FEMALE:
 		return randomAvatar(assetsStore.Female, time.Now().UnixNano())
+	case MONSTER:
+		return randomAvatar(assetsStore.Monster, time.Now().UnixNano())
 	default:
 		return nil, errUnknownGender
 	}
@@ -87,6 +92,8 @@ func GenerateFromUsername(gender Gender, username string) (image.Image, error) {
 		return randomAvatar(assetsStore.Male, int64(h.Sum32()))
 	case FEMALE:
 		return randomAvatar(assetsStore.Female, int64(h.Sum32()))
+	case MONSTER:
+		return randomAvatar(assetsStore.Monster, int64(h.Sum32()))
 	default:
 		return nil, errUnknownGender
 	}
@@ -152,6 +159,8 @@ func getPerson(gender Gender) person {
 		genderPath = "female"
 	case MALE:
 		genderPath = "male"
+	case MONSTER:
+		genderPath = "monster"
 	}
 
 	return person{
