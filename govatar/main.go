@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/o1egl/govatar"
+	"github.com/recoilme/govatar"
 	"github.com/urfave/cli"
 )
 
